@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css"
+  </head>
+  <body>
+    <main id="main-doc">
+      <div id="menu">
+      <nav id="navbar">
+        <ul>
+          <header>CSS<span>(Cascading Style Sheets)</span></header>
+          <li><a href="#what_is_css" class="nav-link">What is CSS</a></li>
+          <li><a href="#prior_knowledge" class="nav-link">Prior Knowledge</a></li>
+          <li><a href="#basic_syntax" class="nav-link">Basic Syntax</a></li>
+          <li><a href="#pseudo-elements" class="nav-link">Pseudo-elements</a></li>
+          <li><a href="#media_queries" class="nav-link">Media Queries</a></li>
+        </ul>
+      </nav>
+      </div>
+    <div id="content">
+      <section class="main-section" id="what_is_css">
+        <header>What is CSS</header>
+        <p>Cascading Style Sheets (CSS) is a style sheet language used for specifying the presentation and styling of a document written in a markup language such as HTML or XML (including XML dialects such as SVG, MathML or XHTML). CSS is a cornerstone technology of the World Wide Web, alongside HTML and JavaScript. </p>
+        <p>CSS is designed to enable the separation of content and presentation, including layout, colors, and fonts. This separation can improve content accessibility, since the content can be written without concern for its presentation; provide more flexibility and control in the specification of presentation characteristics; enable multiple web pages to share formatting by specifying the relevant CSS in a separate .css file, which reduces complexity and repetition in the structural content; and enable the .css file to be cached to improve the page load speed between the pages that share the file and its formatting. </p>
+        <p>Separation of formatting and content also makes it feasible to present the same markup page in different styles for different rendering methods, such as on-screen, in print, by voice (via speech-based browser or screen reader), and on Braille-based tactile devices. CSS also has rules for alternate formatting if the content is accessed on a mobile device.</p>
+        <p>The name cascading comes from the specified priority scheme to determine which declaration applies if more than one declaration of a property match a particular element. This cascading priority scheme is predictable.</p>
+      </section>
+      <section class="main-section" id="prior_knowledge">
+        <header>Prior knowledge</header>
+        <p>In order to use this guide we assume you already have this knowledge </p>
+        <ul>
+          <li>A general understanding of what is the world wide web commonly reffered to as www, and the internet</li>
+          <li>A practical knowledge of hyper text markup language (html)</li>
+          <li>Some programming knowledge even if its basic. If not you can learn at <a href="https://freecodecamp.org" target="_blank">freeCodeCamp.org</a></li>
+        <ul>
+      </section>
+      <section class="main-section" id="basic_syntax">
+        <header>Basic Syntax</header>
+        <p>CSS has a simple syntax and uses a number of English keywords to specify the names of various style properties. </p>
+        <code> .class{attribute:value;
+          } </code>
+        <code>#id{attribute:value;
+          }  </code>
+        <ul>
+          <li>A style sheet consists of a list of rules. Each rule or rule-set consists of one or more selectors, and a declaration block.</li>
+          <li>In CSS, selectors declare which part of the markup a style applies to by matching tags and attributes in the markup itself.</li>
+          <li>Multiple simple selectors may be joined using combinators to specify elements by location, element type, id, class, or any combination thereof.[8] The order of the selectors is important</li>
+        <ul>
+        <p>There is alot more parts to this just read on </p>
+      </section>
+      <section class="main-section" id="pseudo-elements">
+        <header>Pseudo-elements</header>
+        <p>Pseudo-classes are used in CSS selectors to permit formatting based on information that is not contained in the document tree </p>
+        <code> :hover</code>
+        <code> :last-of-type</code>
+        <p> A pseudo-class classifies document elements, such as :link or :visited, whereas a pseudo-element makes a selection that may consist of partial elements. Note the distinction between the double-colon notation used for pseudo-elements and the single-colon notation used for pseudo-classes.</p>
+      </section>
+      <section class="main-section" id="media_queries">
+        <header>Media Queries</header>
+        <p>The @media CSS at-rule can be used to apply part of a style sheet based on the result of one or more media queries. With it, you specify a media query and a block of CSS to apply to the document if and only if the media query matches the device on which the content is being used. </p>
+        <code> @media{ .class/element/#id{attribute:value}} </code>
+        <p> Because media queries provide insights into the capabilities—and by extension, the features and design—of the device the user is working with, there is the potential that they could be abused to construct a "fingerprint" which identifies the device, or at least categorizes it to some degree of detail that may be undesirable to users.</p>
+      </section>
+    </div>
+    </main>
+  </body>
+</html>
