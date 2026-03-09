@@ -82,16 +82,17 @@ body{
     width: 30vw;
     border: 1px solid rgba(240, 235, 235, 0.832);
     border-radius: 50%;
-    z-index: -1;
-    animation: spin 12s linear infinite;
+    z-index: 1;
+    animation: spin 35s linear infinite;
 }
 
 .icon{
-    height:80px;
-    width: 80px;
+    height:5vw;
+    width: 5vw;
     position: absolute;
     cursor: pointer;
-    animation: counter-spin 12s linear infinite;
+    animation: counter-spin 35s linear infinite;
+    z-index: 2;
 }
 
 
@@ -145,8 +146,24 @@ left: 17%;
 }
 
 .icon:hover {
-    border: #23d5ab 1px solid;
+    /* animation-play-state: paused; */
+    border: lightgray 1px solid;
+    border-radius: 20px;
+    box-shadow: -2px 4px 10px lightsalmon; 
+    color: orange;
     cursor: pointer;
+    scale: 1.1;
+}
+
+
+.icon svg,
+.icon path {
+    pointer-events: none;
+}
+
+
+.icon:hover svg path {
+    fill: rgb(194, 131, 21); 
 }
 
 .skill-content{
@@ -156,6 +173,18 @@ left: 17%;
     justify-content: center;
     padding: 60px 70px;
     border-left: 1px solid rgba(124, 123, 123, 0.8);
+}
+
+.skill-content-heading{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    text-align: center;
+    font-size: 4vw;
+}
+
+.skill-content-info{
+    font-family: monospace ;
+    text-align: center;
+    font-size: 1.5vw;
 }
 
 
@@ -342,6 +371,11 @@ h2 {
 .linkedin-icon{
     height:63px;
     margin-top:5px
+}
+
+
+.hidden{
+    visibility: hidden;
 }
 
  /* Small devices (landscape phones, 576px and up) */
