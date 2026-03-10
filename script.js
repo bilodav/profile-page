@@ -42,3 +42,39 @@ skillIcons.forEach((icon) => {
         
     })
 });
+
+const scrollContainer = document.querySelector('.scroll-container');
+const section = document.querySelector('.horizontal-section');
+const track = document.querySelector('.horizontal-track');
+const numCards = document.querySelectorAll('.website-card').length;
+
+let snapTimeout;
+
+scrollContainer.addEventListener('scroll', () => {
+    const sectionTop = section.offsetTop;
+    const sectionHeight = section.offsetHeight;
+    const scrollY = scrollContainer.scrollTop;
+
+    const progress = (scrollY - sectionTop) / (sectionHeight - scrollContainer.clientHeight);
+    const clamped = Math.max(0, Math.min(1, progress));
+
+    const maxTranslate = (numCards - 1) * 100;
+    track.style.transform = `translateX(-${clamped * maxTranslate}vw)`;
+
+    // --- Snapping logic ---
+    // Only try to snap if we're inside the horizontal section
+    if (clamped > 0 && clamped < 1) {
+        clearTimeout(snapTimeout);
+        snapTimeout = setTimeout(() => {
+            // Figure out which card we're closest to (0 to numCards-1)
+            const rawCard = clamped * (numCards - 1);
+            const nearestCard = Math.round(rawCard);
+
+            // Calculate the exact scrollY that perfectly shows that card
+            const targetProgress = nearestCard / (numCards - 1);
+            const targetScrollY = sectionTop + targetProgress * (sectionHeight - scrollContainer.clientHeight);
+
+            scrollContainer.scrollTo({ top: targetScrollY, behavior: 'smooth' });
+        }, 50); // 150ms after user stops scrolling
+    }
+});
