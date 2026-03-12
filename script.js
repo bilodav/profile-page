@@ -78,3 +78,20 @@ scrollContainer.addEventListener('scroll', () => {
         }, 50); // 150ms after user stops scrolling
     }
 });
+
+// Circle animation
+const icons = document.querySelectorAll('.icon');
+const circle = document.querySelector('.circle');
+
+icons.forEach(icon => {
+    icon.addEventListener('mouseenter', () => {
+        circle.style.animationPlayState = 'paused';
+        icons.forEach(i => i.style.animationPlayState = 'paused');
+    });
+
+    icon.addEventListener('mouseleave', () => {
+        circle.style.animationPlayState = 'running';
+        icons.forEach(i => i.style.animationPlayState = 'running');
+    });
+});
+
