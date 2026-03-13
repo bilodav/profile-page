@@ -1,4 +1,4 @@
-let skillIcons = document.querySelectorAll(".icon");
+const skillIcons = document.querySelectorAll(".icon");
 
 let skillHeading = document.querySelector(".skill-content-heading")
 let skillInfo = document.querySelector(".skill-content-info")
@@ -82,16 +82,27 @@ scrollContainer.addEventListener('scroll', () => {
 // Circle animation
 const icons = document.querySelectorAll('.icon');
 const circle = document.querySelector('.circle');
+const circleText = document.querySelector(".circle-skill-text")
 
 icons.forEach(icon => {
     icon.addEventListener('mouseenter', () => {
         circle.style.animationPlayState = 'paused';
         icons.forEach(i => i.style.animationPlayState = 'paused');
+        circleText.classList.remove("hidden")
+        
     });
 
     icon.addEventListener('mouseleave', () => {
         circle.style.animationPlayState = 'running';
         icons.forEach(i => i.style.animationPlayState = 'running');
+        
     });
 });
+
+
+
+
+
+
+
 

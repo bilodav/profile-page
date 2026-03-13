@@ -119,6 +119,13 @@ background-size: cover;
     animation: spin 35s linear infinite;
 }
 
+.circle-skill-text{
+    position: absolute;
+    top: 50%;
+    font-size: 2.5vw;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 .icon{
     height:5vw;
     width: 5vw;
