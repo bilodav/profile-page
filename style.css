@@ -357,17 +357,10 @@ left: 17%;
     
 }
 
-.circular-elements::before:hover .circle {
-    animation-play-state: paused;
-}
 
-.circular-elements::before:hover .icon {
-    animation-play-state: paused;
-
-}
 
 .icon:hover {
-    /* animation-play-state: paused; */
+
     border: lightgray 1px solid;
     border-radius: 20px;
     box-shadow: -2px 4px 10px lightsalmon,
