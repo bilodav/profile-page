@@ -664,8 +664,19 @@ iframe:hover{
     border-radius: 20px;
 }
 
-.contact-div span, .contact-div svg {
-    display: block;
+.contact-div svg {
+    height: 40px;
+    width: 40px;
+    flex-shrink: 0;
+}
+
+.contact-div a{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
 }
 
 
