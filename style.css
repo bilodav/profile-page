@@ -662,6 +662,8 @@ iframe:hover{
               inset -4px -4px 8px rgba(255, 255, 255, 0.9);
               padding: 10px 20px;
     border-radius: 20px;
+    align-items: center;
+    justify-content: center;
 }
 
 .contact-div svg {
@@ -677,6 +679,7 @@ iframe:hover{
     gap: 12px;
     text-decoration: none;
     color: inherit;
+    font-size: 2vw;
 }
 
 
