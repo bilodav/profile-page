@@ -197,14 +197,7 @@ left: 17%;
     
 }
 
-.circular-elements:hover .circle {
-    animation-play-state: paused;
-}
 
-.circular-elements:hover .icon {
-    animation-play-state: paused;
-
-}
 
 
 
