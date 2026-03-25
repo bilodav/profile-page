@@ -657,6 +657,25 @@ iframe:hover{
     border-radius: 20px;
     align-items: center;
     justify-content: center;
+    background-image: linear-gradient(-145deg, #f8f9fa, #f8f9fa,#e2dcd0, #f8f9fa);
+    background-position: right;
+    background-size: 300% 300%;
+    transition: all 300ms ease-in-out ;
+}
+
+.contact-div:hover {
+    background-position: left;
+}
+
+.contact-div svg {
+    height: 40px;
+    width: 40px;
+    flex-shrink: 0;
+    transition: all 300ms ease-in-out ;
+}
+
+.contact-div:hover svg  {
+    fill: #e67b49;
 }
 
 .contact-div svg {
