@@ -99,6 +99,33 @@ icons.forEach(icon => {
     });
 });
 
+// Logic to unlock iframe
+
+const iframeElList = document.querySelectorAll("iframe");
+const iframeOverlayList = document.querySelectorAll(".iframe-overlay");
+
+const projectButtonList = document.querySelectorAll(".project-description button");
+
+projectButtonList.forEach( (button, index) =>{
+    button.addEventListener("click", (e)=>{
+        console.log(index);
+        if (button.textContent === "Scroll site on page"){
+            button.textContent = "Disable"
+            iframeOverlayList[index].classList.add("hidden");
+            console.log("activated")
+        } else  {
+            button.textContent = "Scroll site on page";
+            iframeOverlayList[index].classList.remove("hidden");
+
+        }
+        
+        
+        
+
+    })
+}
+)
+
 
 
 
