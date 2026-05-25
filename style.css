@@ -573,6 +573,10 @@ iframe:hover {
     -2px -2px 6px lightcoral;
 }
 
+.active-button {
+  background: #e8a048;
+}
+
 .project-description p {
   height: 90%;
   font-size: 1rem;
