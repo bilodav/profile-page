@@ -26,7 +26,11 @@ const skillSet = [
   },
   {
     skill: "Figma",
-    info: "Able to translate Figma design files into pixel-perfect, responsive interfaces — bridging the gap between design and development with precision and attention to detail.",
+    info: "Experienced in turning Figma designs into responsive, production-ready interfaces, effectively bridging the gap between design concepts and functional web applications.",
+  },
+  {
+    skill: "TypeScript",
+    info: "Skilled in leveraging TypeScript across frontend and backend development to create reliable, scalable, and maintainable web applications.",
   },
 ];
 
