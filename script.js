@@ -46,45 +46,165 @@ skillIcons.forEach((icon) => {
   });
 });
 
+// Scroll Snap Logic
 const scrollContainer = document.querySelector(".scroll-container");
-const section = document.querySelector(".horizontal-section");
+const sections = document.querySelectorAll(".scroll-container > section");
 const track = document.querySelector(".horizontal-track");
 const numCards = document.querySelectorAll(".website-card").length;
 
-let snapTimeout;
+let isScrolling = false;
+let currentIndex = 0;
+let currentCard = 0;
+let manualScrollTimeout = null;
+let isProgrammatic = false; // separate flag for programmatic scrolls
 
-scrollContainer.addEventListener("scroll", () => {
-  const sectionTop = section.offsetTop;
-  const sectionHeight = section.offsetHeight;
-  const scrollY = scrollContainer.scrollTop;
+function getShowcaseIndex() {
+  return Array.from(sections).findIndex((s) => s.id === "showcase");
+}
 
-  const progress =
-    (scrollY - sectionTop) / (sectionHeight - scrollContainer.clientHeight);
-  const clamped = Math.max(0, Math.min(1, progress));
+function getSectionAtScroll() {
+  const scrollMid =
+    scrollContainer.scrollTop + scrollContainer.clientHeight / 2;
+  let found = 0;
+  sections.forEach((section, index) => {
+    const top = section.offsetTop;
+    const bottom = top + section.offsetHeight;
+    if (scrollMid >= top && scrollMid < bottom) found = index;
+  });
+  return found;
+}
 
-  const maxTranslate = (numCards - 1) * 100;
-  track.style.transform = `translateX(-${clamped * maxTranslate}vw)`;
+function goToSection(index) {
+  if (index < 0 || index >= sections.length) return;
 
-  // --- Snapping logic ---
-  // Only try to snap if we're inside the horizontal section
-  if (clamped > 0 && clamped < 1) {
-    clearTimeout(snapTimeout);
-    snapTimeout = setTimeout(() => {
-      // Figure out which card we're closest to (0 to numCards-1)
-      const rawCard = clamped * (numCards - 1);
-      const nearestCard = Math.round(rawCard);
+  const showcaseIndex = getShowcaseIndex();
 
-      // Calculate the exact scrollY that perfectly shows that card
-      const targetProgress = nearestCard / (numCards - 1);
-      const targetScrollY =
-        sectionTop +
-        targetProgress * (sectionHeight - scrollContainer.clientHeight);
-
-      scrollContainer.scrollTo({ top: targetScrollY, behavior: "smooth" });
-    }, 300); // 150ms after user stops scrolling
+  if (index === showcaseIndex && currentIndex < index) {
+    currentCard = 0;
+    track.style.transition = "none";
+    track.style.transform = `translateX(0)`;
   }
+
+  if (index === showcaseIndex && currentIndex > index) {
+    currentCard = numCards - 1;
+    track.style.transition = "none";
+    track.style.transform = `translateX(-${currentCard * 100}vw)`;
+  }
+
+  currentIndex = index;
+  isProgrammatic = true;
+  isScrolling = true;
+
+  sections[index].scrollIntoView({ behavior: "smooth" });
+
+  setTimeout(() => {
+    isScrolling = false;
+    isProgrammatic = false;
+  }, 800);
+}
+
+function goToCard(index) {
+  if (index < 0 || index >= numCards) return false;
+  currentCard = index;
+  track.style.transition = "transform 0.5s ease";
+  track.style.transform = `translateX(-${currentCard * 100}vw)`;
+
+  isScrolling = true;
+  setTimeout(() => {
+    isScrolling = false;
+  }, 550);
+
+  return true;
+}
+
+// Sync after manual scrollbar drag — snaps to nearest section when user stops
+scrollContainer.addEventListener("scroll", () => {
+  if (isProgrammatic) return; // ignore scroll events we triggered
+
+  // Clear any previous timer
+  clearTimeout(manualScrollTimeout);
+
+  // Wait until scrolling fully stops, then sync and snap
+  manualScrollTimeout = setTimeout(() => {
+    const nearest = getSectionAtScroll();
+    currentIndex = nearest;
+
+    // Sync card position if in showcase
+    const showcaseIndex = getShowcaseIndex();
+    if (nearest === showcaseIndex) {
+      const trackX = new DOMMatrix(getComputedStyle(track).transform).m41;
+      currentCard = Math.round(Math.abs(trackX) / window.innerWidth);
+    }
+
+    // Snap to the nearest section so we're perfectly aligned
+    isProgrammatic = true;
+    isScrolling = true;
+    sections[nearest].scrollIntoView({ behavior: "smooth" });
+    setTimeout(() => {
+      isScrolling = false;
+      isProgrammatic = false;
+    }, 800);
+  }, 150); // fires 150ms after scrolling stops
 });
 
+scrollContainer.addEventListener(
+  "wheel",
+  (e) => {
+    e.preventDefault();
+    if (isScrolling) return;
+
+    const showcaseIndex = getShowcaseIndex();
+
+    if (currentIndex === showcaseIndex) {
+      if (e.deltaY > 0) {
+        const handled = goToCard(currentCard + 1);
+        if (!handled) goToSection(currentIndex + 1);
+      } else {
+        const handled = goToCard(currentCard - 1);
+        if (!handled) goToSection(currentIndex - 1);
+      }
+      return;
+    }
+
+    if (e.deltaY > 0) {
+      goToSection(currentIndex + 1);
+    } else {
+      goToSection(currentIndex - 1);
+    }
+  },
+  { passive: false },
+);
+
+let touchStartY = 0;
+
+scrollContainer.addEventListener("touchstart", (e) => {
+  touchStartY = e.touches[0].clientY;
+});
+
+scrollContainer.addEventListener("touchend", (e) => {
+  if (isScrolling) return;
+  const delta = touchStartY - e.changedTouches[0].clientY;
+  if (Math.abs(delta) < 30) return;
+
+  const showcaseIndex = getShowcaseIndex();
+
+  if (currentIndex === showcaseIndex) {
+    if (delta > 0) {
+      const handled = goToCard(currentCard + 1);
+      if (!handled) goToSection(currentIndex + 1);
+    } else {
+      const handled = goToCard(currentCard - 1);
+      if (!handled) goToSection(currentIndex - 1);
+    }
+    return;
+  }
+
+  if (delta > 0) {
+    goToSection(currentIndex + 1);
+  } else {
+    goToSection(currentIndex - 1);
+  }
+});
 // Circle animation
 const icons = document.querySelectorAll(".icon");
 const circle = document.querySelector(".circle");
