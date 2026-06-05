@@ -81,7 +81,7 @@ scrollContainer.addEventListener("scroll", () => {
         targetProgress * (sectionHeight - scrollContainer.clientHeight);
 
       scrollContainer.scrollTo({ top: targetScrollY, behavior: "smooth" });
-    }, 50); // 150ms after user stops scrolling
+    }, 300); // 150ms after user stops scrolling
   }
 });
 
@@ -123,6 +123,7 @@ projectButtonList.forEach((button, index) => {
     } else {
       button.textContent = "Interact with Site";
       iframeOverlayList[index].classList.remove("hidden");
+      button.classList.remove("active-button");
     }
   });
 });
