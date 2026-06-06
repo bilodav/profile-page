@@ -444,12 +444,12 @@ h2 {
 }
 
 #showcase {
-  min-height: 100vh;
+  height: 100vh;
 }
 
 #showcase h2 {
-  margin: 200px 0 15px;
-  font-size: 3.5rem;
+  margin: 100px 0 10px;
+  font-size: 3rem;
 }
 
 .horizontal-section {
@@ -479,7 +479,7 @@ h2 {
   display: grid;
   box-sizing: border-box;
   grid-template-columns: 3% 77% 20%;
-  grid-template-rows: 5% 90% 5%;
+  grid-template-rows: 0 90% 0;
 }
 
 .iframe-container {
@@ -512,6 +512,9 @@ iframe {
   border-radius: 25px;
   border: 3px solid black;
   transition: all 250ms ease-in-out;
+  box-shadow:
+    2px 2px 5px lightslategrey,
+    -2px -2px 5px lightgray;
 }
 
 iframe:hover {
@@ -536,6 +539,7 @@ iframe:hover {
   border-radius: 8px;
   width: 70%;
   color: white;
+  background-color: #fff;
   margin: 0;
   box-shadow:
     2px 2px 5px lightslategrey,
@@ -588,8 +592,9 @@ iframe:hover {
 }
 
 .pro-pic {
-  height: 250px;
+  height: 200px;
   border-radius: 60%;
+  margin: 0;
 }
 
 .hello {
@@ -598,6 +603,7 @@ iframe:hover {
   font-style: italic;
   color: #e67b49;
   font-size: 3rem;
+  margin-top: 0.1rem;
   margin-bottom: 0.2rem;
 }
 #about-me > div {
