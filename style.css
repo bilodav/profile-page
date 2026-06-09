@@ -480,6 +480,7 @@ h2 {
   box-sizing: border-box;
   grid-template-columns: 3% 77% 20%;
   grid-template-rows: 0 90% 0;
+  container-type: size;
 }
 
 .iframe-container {
@@ -576,7 +577,7 @@ iframe:hover {
 
 .project-description p {
   height: 90%;
-  font-size: 1.15rem;
+  font-size: 2.3cqb;
   line-height: 1.7;
   background: rgba(255, 255, 255, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.12);
