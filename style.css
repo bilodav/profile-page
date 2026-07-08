@@ -413,6 +413,15 @@ body {
   height: 301px;
 }
 
+.freecodecamp-4 {
+  grid-column-start: 3;
+  grid-column-end: 5;
+  justify-self: center;
+}
+.freecodecamp-4 img {
+  height: 301px;
+}
+
 .intro-img {
   height: 100%;
   margin: 0;
