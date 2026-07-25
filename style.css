@@ -633,7 +633,7 @@ iframe:hover {
   display: flex;
   flex-direction: column;
   width: 80%;
-  height: 85vh;
+  height: 80vh;
   justify-content: space-evenly;
   align-items: center;
   margin: 0 auto;
@@ -647,7 +647,8 @@ iframe:hover {
 .contact-div {
   display: flex;
   flex-direction: row;
-  width: 50%;
+  width: 45%;
+  border: 1px solid transparent;
   box-shadow:
     inset 4px 4px 8px rgba(26, 35, 50, 0.06),
     inset -4px -4px 8px rgba(255, 255, 255, 0.9);
@@ -659,7 +660,7 @@ iframe:hover {
     -145deg,
     #f8f9fa,
     #f8f9fa,
-    #e2dcd0,
+    #f1e8d958,
     #f8f9fa
   );
   background-position: right;
@@ -668,7 +669,12 @@ iframe:hover {
 }
 
 .contact-div:hover {
-  background-position: left;
+  /* background-position: left; */
+  border: 1px solid transparent;
+  box-shadow:
+    inset -5px -5px 8px rgba(26, 35, 50, 0.15),
+    inset 2px 2px 8px rgba(255, 255, 255, 0.9),
+    inset 1px 1px 8px rgba(26, 35, 50, 0.1);
 }
 
 .contact-div svg {
@@ -690,12 +696,13 @@ iframe:hover {
 
 .contact-div a {
   display: flex;
+  width: 100%;
   flex-direction: row;
   align-items: center;
   gap: 12px;
   text-decoration: none;
   color: inherit;
-  font-size: 2vw;
+  font-size: 1.5vw;
 }
 
 .email-icon {
