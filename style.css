@@ -376,7 +376,8 @@ body {
 
 .cert-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  width: 100%;
+  grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 2fr;
   row-gap: 25px;
 }
@@ -387,7 +388,7 @@ body {
 
 .freecodecamp-1 {
   grid-column-start: 1;
-  grid-column-end: 3;
+  grid-column-end: 2;
   justify-self: center;
 }
 
@@ -396,8 +397,8 @@ body {
 }
 
 .freecodecamp-2 {
-  grid-column-start: 3;
-  grid-column-end: 5;
+  grid-column-start: 2;
+  grid-column-end: 3;
   justify-self: center;
 }
 .freecodecamp-2 img {
@@ -405,8 +406,8 @@ body {
 }
 
 .freecodecamp-3 {
-  grid-column-start: 1;
-  grid-column-end: 3;
+  grid-column-start: 3;
+  grid-column-end: 4;
   justify-self: center;
 }
 .freecodecamp-3 img {
@@ -414,11 +415,20 @@ body {
 }
 
 .freecodecamp-4 {
-  grid-column-start: 3;
-  grid-column-end: 5;
+  grid-column-start: 1;
+  grid-column-end: 2;
   justify-self: center;
 }
 .freecodecamp-4 img {
+  height: 301px;
+}
+
+.freecodecamp-5 {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  justify-self: center;
+}
+.freecodecamp-5 img {
   height: 301px;
 }
 
