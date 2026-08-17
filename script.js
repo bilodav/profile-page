@@ -100,6 +100,7 @@ function goToSection(index) {
   setTimeout(() => {
     isScrolling = false;
     isProgrammatic = false;
+    updateActiveSection();
   }, 800);
 }
 
@@ -143,6 +144,7 @@ scrollContainer.addEventListener("scroll", () => {
     setTimeout(() => {
       isScrolling = false;
       isProgrammatic = false;
+      updateActiveSection();
     }, 800);
   }, 150); // fires 150ms after scrolling stops
 });
@@ -214,7 +216,7 @@ icons.forEach((icon) => {
   icon.addEventListener("mouseenter", () => {
     circle.style.animationPlayState = "paused";
     icons.forEach((i) => (i.style.animationPlayState = "paused"));
-    circleText.classList.remove("hidden");
+    circleText.classList.remove("hide");
   });
 
   icon.addEventListener("mouseleave", () => {
@@ -238,12 +240,167 @@ projectButtonList.forEach((button, index) => {
     if (button.textContent === "Interact with Site") {
       button.textContent = "Disable";
       button.classList.add("active-button");
-      iframeOverlayList[index].classList.add("hidden");
+      iframeOverlayList[index].classList.add("hide");
       console.log("activated");
     } else {
       button.textContent = "Interact with Site";
-      iframeOverlayList[index].classList.remove("hidden");
+      iframeOverlayList[index].classList.remove("hide");
       button.classList.remove("active-button");
     }
+  });
+});
+
+// NavBar size response
+
+const burgerMenu = document.querySelector(".burger-menu");
+const navBarList = document.querySelector(".nav-list");
+const navBarIdentifier = document.querySelector(".section-identifier");
+const smallScreenMenu = document.querySelector(".small-screen-menu");
+const smallScreenMenuItem = document.querySelectorAll(".small-screen-menu div");
+
+console.log(smallScreenMenuItem);
+
+function handleNavbarResize() {
+  if (window.innerWidth < 968) {
+    // Mobile: Show burger menu, hide nav list and contact button
+    burgerMenu.classList.remove("hide");
+    navBarList.classList.add("hide");
+    navBarIdentifier.classList.add("nav-center");
+    updateActiveSection();
+  } else {
+    // Desktop: Hide burger menu, show nav list and contact button
+    burgerMenu.classList.add("hide");
+    navBarList.classList.remove("hide");
+    navBarIdentifier.classList.remove("hide");
+    navBarIdentifier.classList.remove("nav-center");
+    updateActiveSection();
+  }
+}
+
+// Run on page load
+handleNavbarResize();
+
+// Run on window resize
+window.addEventListener("resize", handleNavbarResize);
+
+// handle animation for click on burger menu and bring on menu
+
+burgerMenu.addEventListener("click", (e) => {
+  e.stopPropagation();
+  if (!burgerMenu.classList.contains("active")) {
+    burgerMenu.classList.add("active");
+
+    smallScreenMenu.classList.remove("hide");
+  } else if (burgerMenu.classList.contains("active")) {
+    burgerMenu.classList.remove("active");
+
+    smallScreenMenu.classList.add("hide");
+  }
+});
+
+smallScreenMenuItem.forEach((item) => {
+  item.addEventListener("click", (e) => {
+    e.stopPropagation();
+    let link = item.querySelector("a");
+    window.location.href = link.getAttribute("href");
+    smallScreenMenu.classList.add("hide");
+    burgerMenu.classList.remove("active");
+  });
+});
+
+document.querySelector("body").addEventListener("click", () => {
+  smallScreenMenu.classList.add("hide");
+  burgerMenu.classList.remove("active");
+});
+
+navBarIdentifier.addEventListener("click", () => {
+  if (navBarIdentifier.textContent === "Contact Me") {
+    window.location.href = "#contact-me";
+  }
+});
+
+function updateActiveSection() {
+  // Get all the sections
+  const sections = document.querySelectorAll("section[id]");
+
+  // Get all nav links
+  const navLinks = document.querySelectorAll(".nav-center a[href^='#']");
+
+  // Get current scroll position within the scroll container
+  // (the page scrolls inside .scroll-container, not the window)
+  const scrollPosition = scrollContainer.scrollTop + 150;
+
+  let currentSection = "";
+
+  // Determine which section is currently in view
+  sections.forEach((section) => {
+    const sectionTop = section.offsetTop;
+    const sectionHeight = section.offsetHeight;
+
+    if (
+      scrollPosition >= sectionTop &&
+      scrollPosition < sectionTop + sectionHeight
+    ) {
+      currentSection = section.getAttribute("id");
+    }
+  });
+
+  // If at the very top of the scroll container, highlight the intro section
+  if (scrollContainer.scrollTop < 100) {
+    currentSection = "intro";
+  }
+
+  //update of active class on nav links
+  const sectionIdentifier = document.querySelector(".section-identifier");
+
+  smallScreenMenuItem.forEach((link) => {
+    link.classList.remove("hide");
+    let linkEl = link.querySelector("a");
+    let hrefEl = linkEl.getAttribute("href");
+    if (hrefEl === `#${currentSection}`) {
+      link.classList.add("hide");
+    }
+  });
+
+  navLinks.forEach((link) => {
+    link.classList.remove("active");
+
+    const href = link.getAttribute("href");
+    if (href === `#${currentSection}`) {
+      link.classList.add("active");
+    }
+
+    if (window.innerWidth < 968) {
+      // sectionIdentifier.textContent=currentSection;
+
+      if (currentSection === "intro") {
+        sectionIdentifier.textContent = "Home";
+      } else if (currentSection === "skill-set") {
+        sectionIdentifier.textContent = "Skills";
+      } else if (currentSection === "showcase") {
+        sectionIdentifier.textContent = "Projects";
+      } else if (currentSection === "resume") {
+        sectionIdentifier.textContent = "Certifications";
+      } else if (currentSection === "about-me") {
+        sectionIdentifier.textContent = "About";
+      } else if (currentSection === "contact-me") {
+        sectionIdentifier.textContent = "Contact Me";
+      }
+    } else {
+      sectionIdentifier.textContent = "Contact Me";
+    }
+  });
+}
+
+// Optional: Smooth scroll enhancement (already have scroll-behavior: smooth in CSS)
+// But this adds a click handler to update immediately
+document.querySelectorAll('.nav-center a[href^="#"]').forEach((link) => {
+  link.addEventListener("click", function (e) {
+    // Remove active from all links
+    document
+      .querySelectorAll(".nav-center a")
+      .forEach((l) => l.classList.remove("active"));
+    // Add active to clicked link
+    this.classList.add("active");
   });
 });
