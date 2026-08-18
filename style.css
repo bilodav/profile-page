@@ -712,34 +712,40 @@ nav {
   z-index: 2;
 }
 
-.icon:nth-child(1) {
+.icon[value="Git"] {
   left: 84%;
   top: 12%;
-} /* JS      */
-.icon:nth-child(2) {
+}
+
+.icon[value="HTML"] {
   left: 91%;
   top: 55%;
-} /* TS      */
-.icon:nth-child(3) {
+}
+
+.icon[value="CSS"] {
   left: 65%;
   top: 91%;
-} /* React   */
-.icon:nth-child(4) {
+}
+
+.icon[value="JavaScript"] {
   left: 24%;
   top: 91%;
-} /* Figma   */
-.icon:nth-child(5) {
+}
+
+.icon[value="TypeScript"] {
   left: 0%;
   top: 55%;
-} /* CSS     */
-.icon:nth-child(6) {
+}
+
+.icon[value="React"] {
   left: 8%;
   top: 12%;
-} /* Git     */
-.icon:nth-child(7) {
+}
+
+.icon[value="Figma"] {
   left: 42%;
   top: -5%;
-} /* HTML    */
+}
 
 @keyframes spin {
   from {
