@@ -101,7 +101,7 @@ function goToSection(index) {
     isScrolling = false;
     isProgrammatic = false;
     updateActiveSection();
-  }, 800);
+  }, 350);
 }
 
 function goToCard(index) {
