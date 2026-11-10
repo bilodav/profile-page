@@ -58,6 +58,24 @@ let currentCard = 0;
 let manualScrollTimeout = null;
 let isProgrammatic = false; // separate flag for programmatic scrolls
 
+// Wheel gesture tracking
+let lockUntil = 0;
+let lastWheelTime = 0;
+
+// Below this width the page uses normal native scrolling (see mobile CSS)
+const isMobileView = () => window.innerWidth < 968;
+
+// Locks input for `ms` milliseconds while an animation plays
+function lock(ms) {
+  lockUntil = performance.now() + ms;
+  isScrolling = true;
+  setTimeout(() => {
+    isScrolling = false;
+    isProgrammatic = false;
+    updateActiveSection();
+  }, ms);
+}
+
 function getShowcaseIndex() {
   return Array.from(sections).findIndex((s) => s.id === "showcase");
 }
@@ -93,15 +111,8 @@ function goToSection(index) {
 
   currentIndex = index;
   isProgrammatic = true;
-  isScrolling = true;
-
   sections[index].scrollIntoView({ behavior: "smooth" });
-
-  setTimeout(() => {
-    isScrolling = false;
-    isProgrammatic = false;
-    updateActiveSection();
-  }, 350);
+  lock(900);
 }
 
 function goToCard(index) {
@@ -110,17 +121,14 @@ function goToCard(index) {
   track.style.transition = "transform 0.5s ease";
   track.style.transform = `translateX(-${currentCard * 100}vw)`;
 
-  isScrolling = true;
-  setTimeout(() => {
-    isScrolling = false;
-  }, 550);
+  lock(650);
 
   return true;
 }
 
 // Sync after manual scrollbar drag — snaps to nearest section when user stops
 scrollContainer.addEventListener("scroll", () => {
-  if (isProgrammatic) return; // ignore scroll events we triggered
+  if (isProgrammatic || isMobileView()) return; // ignore our own scrolls, and mobile uses native scrolling
 
   // Clear any previous timer
   clearTimeout(manualScrollTimeout);
@@ -139,40 +147,36 @@ scrollContainer.addEventListener("scroll", () => {
 
     // Snap to the nearest section so we're perfectly aligned
     isProgrammatic = true;
-    isScrolling = true;
     sections[nearest].scrollIntoView({ behavior: "smooth" });
-    setTimeout(() => {
-      isScrolling = false;
-      isProgrammatic = false;
-      updateActiveSection();
-    }, 800);
+    lock(900);
   }, 150); // fires 150ms after scrolling stops
 });
 
 scrollContainer.addEventListener(
   "wheel",
   (e) => {
+    if (isMobileView()) return; // let the browser scroll normally
     e.preventDefault();
-    if (isScrolling) return;
 
+    const now = performance.now();
+    const gap = now - lastWheelTime;
+    lastWheelTime = now;
+
+    // Still animating, or still in the momentum tail of the last gesture
+    if (now < lockUntil || gap < 100) return;
+    // Ignore tiny accidental deltas
+    if (Math.abs(e.deltaY) < 4) return;
+
+    const dir = e.deltaY > 0 ? 1 : -1;
     const showcaseIndex = getShowcaseIndex();
 
     if (currentIndex === showcaseIndex) {
-      if (e.deltaY > 0) {
-        const handled = goToCard(currentCard + 1);
-        if (!handled) goToSection(currentIndex + 1);
-      } else {
-        const handled = goToCard(currentCard - 1);
-        if (!handled) goToSection(currentIndex - 1);
-      }
+      const handled = goToCard(currentCard + dir);
+      if (!handled) goToSection(currentIndex + dir);
       return;
     }
 
-    if (e.deltaY > 0) {
-      goToSection(currentIndex + 1);
-    } else {
-      goToSection(currentIndex - 1);
-    }
+    goToSection(currentIndex + dir);
   },
   { passive: false },
 );
@@ -184,7 +188,7 @@ scrollContainer.addEventListener("touchstart", (e) => {
 });
 
 scrollContainer.addEventListener("touchend", (e) => {
-  if (isScrolling) return;
+  if (isMobileView() || isScrolling) return;
   const delta = touchStartY - e.changedTouches[0].clientY;
   if (Math.abs(delta) < 30) return;
 
@@ -207,6 +211,7 @@ scrollContainer.addEventListener("touchend", (e) => {
     goToSection(currentIndex - 1);
   }
 });
+
 // Circle animation
 const icons = document.querySelectorAll(".icon");
 const circle = document.querySelector(".circle");
@@ -236,12 +241,10 @@ const projectButtonList = document.querySelectorAll(
 
 projectButtonList.forEach((button, index) => {
   button.addEventListener("click", (e) => {
-    console.log(index);
     if (button.textContent === "Interact with Site") {
       button.textContent = "Disable";
       button.classList.add("active-button");
       iframeOverlayList[index].classList.add("hide");
-      console.log("activated");
     } else {
       button.textContent = "Interact with Site";
       iframeOverlayList[index].classList.remove("hide");
@@ -257,8 +260,6 @@ const navBarList = document.querySelector(".nav-list");
 const navBarIdentifier = document.querySelector(".section-identifier");
 const smallScreenMenu = document.querySelector(".small-screen-menu");
 const smallScreenMenuItem = document.querySelectorAll(".small-screen-menu div");
-
-console.log(smallScreenMenuItem);
 
 function handleNavbarResize() {
   if (window.innerWidth < 968) {
@@ -353,6 +354,9 @@ function updateActiveSection() {
   //update of active class on nav links
   const sectionIdentifier = document.querySelector(".section-identifier");
 
+  // Highlight the Contact Me button while the contact section is in view
+  sectionIdentifier.classList.toggle("active", currentSection === "contact-me");
+
   smallScreenMenuItem.forEach((link) => {
     link.classList.remove("hide");
     let linkEl = link.querySelector("a");
@@ -371,8 +375,6 @@ function updateActiveSection() {
     }
 
     if (window.innerWidth < 968) {
-      // sectionIdentifier.textContent=currentSection;
-
       if (currentSection === "intro") {
         sectionIdentifier.textContent = "Home";
       } else if (currentSection === "skill-set") {
@@ -403,4 +405,22 @@ document.querySelectorAll('.nav-center a[href^="#"]').forEach((link) => {
     // Add active to clicked link
     this.classList.add("active");
   });
+});
+
+// Keep the nav highlight in sync with native scrolling (used on mobile)
+let navTicking = false;
+scrollContainer.addEventListener("scroll", () => {
+  if (navTicking) return;
+  navTicking = true;
+  requestAnimationFrame(() => {
+    updateActiveSection();
+    navTicking = false;
+  });
+});
+
+// Reset the desktop card track when the screen size changes
+window.addEventListener("resize", () => {
+  currentCard = 0;
+  track.style.transition = "none";
+  track.style.transform = "";
 });
