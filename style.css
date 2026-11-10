@@ -286,25 +286,32 @@ nav {
 }
 
 .burger-menu {
+  --bar-gap: 5px; /* space between the three bars */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  height: 24px;
-  gap: 1px;
-  padding: 10px 6px;
+  gap: var(--bar-gap);
+  width: auto;
+  height: auto;
+  padding: 10px 8px;
 }
 
 .burger-menu > span {
   margin: 0;
   padding: 0;
   display: block;
+  line-height: 0; /* stops the inline SVG leaving extra space under each bar */
   transition: all 0.3s ease;
 }
 
+.burger-menu svg {
+  display: block;
+}
+
+/* Bars are 2px tall, so centre-to-centre distance is 2px + gap */
 .burger-menu.active > span:nth-child(1) {
-  transform: translateY(9px) rotate(45deg);
+  transform: translateY(calc(2px + var(--bar-gap))) rotate(45deg);
 }
 
 .burger-menu.active > span:nth-child(2) {
@@ -312,7 +319,7 @@ nav {
 }
 
 .burger-menu.active > span:nth-child(3) {
-  transform: translateY(-9px) rotate(-45deg);
+  transform: translateY(calc(-2px - var(--bar-gap))) rotate(-45deg);
 }
 
 .small-screen-menu {
@@ -369,7 +376,6 @@ nav {
     top: var(--nav-height);
   }
 }
-
 /* =========================================================
    6. INTRO / HERO
    ========================================================= */
@@ -826,6 +832,55 @@ iframe:hover {
   color: black;
 }
 
+/* Pagination pill: created by script.js, shown only while Projects is in view */
+.project-pagination {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.pagination-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.pagination-dot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #ced4da;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.pagination-dot:hover {
+  background: var(--color-accent);
+}
+
+.pagination-dot.active {
+  width: 22px;
+  border-radius: 9999px;
+  background: #e67b49;
+}
+
 @media (max-width: 968px) {
   #showcase {
     height: auto;
@@ -900,6 +955,26 @@ iframe:hover {
     height: auto;
     font-size: 0.95rem;
     line-height: 1.5;
+  }
+
+  .project-pagination {
+    bottom: 12px;
+    gap: 8px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  .pagination-dots {
+    gap: 6px;
+  }
+
+  .pagination-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .pagination-dot.active {
+    width: 18px;
   }
 }
 
@@ -980,13 +1055,6 @@ iframe:hover {
 
 .about-flex > div {
   width: 75%;
-}
-
-.about-flex > div {
-  width: 75%;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
 }
 
 .pro-pic {

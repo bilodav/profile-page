@@ -122,9 +122,71 @@ function goToCard(index) {
   track.style.transform = `translateX(-${currentCard * 100}vw)`;
 
   lock(650);
+  updatePagination();
 
   return true;
 }
+
+// Projects pagination (only visible while the Projects section is in view)
+const cardScroller = document.querySelector(".horizontal-sticky");
+let activeSectionId = "intro";
+
+const pagination = document.createElement("div");
+pagination.className = "project-pagination hide";
+pagination.setAttribute("aria-label", "Project pagination");
+pagination.innerHTML = `<div class="pagination-dots"></div><span class="pagination-label"></span>`;
+document.body.appendChild(pagination);
+
+const dotsEl = pagination.querySelector(".pagination-dots");
+const labelEl = pagination.querySelector(".pagination-label");
+
+for (let i = 0; i < numCards; i++) {
+  const dot = document.createElement("button");
+  dot.type = "button";
+  dot.className = "pagination-dot";
+  dot.setAttribute("aria-label", `Go to project ${i + 1}`);
+  dot.addEventListener("click", () => {
+    if (isMobileView()) {
+      cardScroller.scrollTo({
+        left: i * cardScroller.clientWidth,
+        behavior: "smooth",
+      });
+    } else {
+      goToCard(i);
+    }
+  });
+  dotsEl.appendChild(dot);
+}
+
+function getActiveCard() {
+  if (isMobileView()) {
+    return Math.round(
+      cardScroller.scrollLeft / (cardScroller.clientWidth || 1),
+    );
+  }
+  return currentCard;
+}
+
+function updatePagination() {
+  const inShowcase = activeSectionId === "showcase";
+  pagination.classList.toggle("hide", !inShowcase);
+  if (!inShowcase) return;
+
+  const active = Math.min(Math.max(getActiveCard(), 0), numCards - 1);
+  dotsEl.querySelectorAll(".pagination-dot").forEach((dot, i) => {
+    dot.classList.toggle("active", i === active);
+    dot.setAttribute("aria-current", i === active ? "true" : "false");
+  });
+
+  const left = numCards - 1 - active;
+  labelEl.textContent =
+    left > 0
+      ? `${active + 1} / ${numCards} · ${left} left`
+      : `${active + 1} / ${numCards} · last one`;
+}
+
+// Mobile: update while swiping through the cards
+cardScroller.addEventListener("scroll", updatePagination, { passive: true });
 
 // Sync after manual scrollbar drag — snaps to nearest section when user stops
 scrollContainer.addEventListener("scroll", () => {
@@ -357,6 +419,9 @@ function updateActiveSection() {
   // Highlight the Contact Me button while the contact section is in view
   sectionIdentifier.classList.toggle("active", currentSection === "contact-me");
 
+  activeSectionId = currentSection;
+  updatePagination();
+
   smallScreenMenuItem.forEach((link) => {
     link.classList.remove("hide");
     let linkEl = link.querySelector("a");
@@ -423,4 +488,5 @@ window.addEventListener("resize", () => {
   currentCard = 0;
   track.style.transition = "none";
   track.style.transform = "";
+  updatePagination();
 });
